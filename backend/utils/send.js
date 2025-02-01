@@ -7,13 +7,13 @@ export async function send({subject,to,text,html}){
         host: 'smtp.ethereal.email',
         port: 587,
         auth: {
-            user: 'nakia28@ethereal.email',
-            pass: '6hdUYNgeE1nuW5af5h'
+            user: 'kale.hauck42@ethereal.email',
+            pass: 'RTPgNrymPUrSzB7q88'
         }
     });
 
     await transporter.sendMail({
-        from: 'nakia28@ethereal.email', 
+        from: 'kale.hauck42@ethereal.email', 
         to: to,
         subject: subject, 
         text: text,

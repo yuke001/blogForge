@@ -70,7 +70,10 @@ export const forgortPassword = asyncHandler(async (req, res, next) => {
   //save to db
   await exisitingUser.save({ validateBeforeSave: false });
 
-  let resetPasswordLink = `${req.protocol}://${req.hostname}:5000/reset-password/:${resetPasswordToken}`;
+  // let resetPasswordLink = `${req.protocol}://${req.hostname}:5000/reset-password/:${resetPasswordToken}`;
+  let resetPasswordLink = `${req.protocol}://${req.hostname}:5000/api/user/reset-password/${resetPasswordToken}`;
+
+
   let options = {
     subject: "Reset your password",
     to: exisitingUser.email,
@@ -145,4 +148,31 @@ export const forgortPassword = asyncHandler(async (req, res, next) => {
 
   res.status(200).json("Reset password link sent");
 });
-export const resetPassword = asyncHandler(async (req, res, next) => {});
+
+export const resetPassword = asyncHandler(async (req, res, next) => {
+  const { token } = req.params;
+  const { password, confirmPassword } = req.body;
+
+  const user = await User.findOne({
+    resetPasswordToken: token,
+    resetPasswordTokenExpiresAt: { $gt: Date.now() }
+  });
+
+  if (!user) {
+    throw new Error("Invalid or expired reset token");
+  }
+
+  user.password = password;
+  user.confirmPassword = confirmPassword;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordTokenExpiresAt = undefined;
+
+  await user.save();
+
+  const loginToken = await generateToken(user._id);
+
+  res.status(200).json({
+    message: "Password reset successful",
+    token: loginToken
+  });
+});
