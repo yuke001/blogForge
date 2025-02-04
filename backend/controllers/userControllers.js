@@ -71,8 +71,8 @@ export const forgortPassword = asyncHandler(async (req, res, next) => {
   await exisitingUser.save({ validateBeforeSave: false });
 
   // let resetPasswordLink = `${req.protocol}://${req.hostname}:5000/reset-password/:${resetPasswordToken}`;
-  let resetPasswordLink = `${req.protocol}://${req.hostname}:5000/api/user/reset-password/${resetPasswordToken}`;
-
+  let resetPasswordLink = `${req.protocol}://${req.hostname}:5000/api/users/reset-password/${resetPasswordToken}`;
+  console.log(resetPasswordLink);
 
   let options = {
     subject: "Reset your password",
@@ -149,13 +149,14 @@ export const forgortPassword = asyncHandler(async (req, res, next) => {
   res.status(200).json("Reset password link sent");
 });
 
+// reset password
 export const resetPassword = asyncHandler(async (req, res, next) => {
   const { token } = req.params;
   const { password, confirmPassword } = req.body;
 
   const user = await User.findOne({
     resetPasswordToken: token,
-    resetPasswordTokenExpiresAt: { $gt: Date.now() }
+    resetPasswordTokenExpiresAt: { $gt: Date.now() },
   });
 
   if (!user) {
@@ -167,12 +168,14 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
   user.resetPasswordToken = undefined;
   user.resetPasswordTokenExpiresAt = undefined;
 
-  await user.save();
+  await user.save({ validateBeforeSave: false });
 
-  const loginToken = await generateToken(user._id);
+  // const loginToken = await generateToken(user._id);
 
-  res.status(200).json({
-    message: "Password reset successful",
-    token: loginToken
-  });
+  // res.status(200).json({
+  //   message: "Password reset successful",
+  //   // token: loginToken,
+  // });
+
+  res.status(200).send("Password reset successful");
 });
