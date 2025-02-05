@@ -14,3 +14,5 @@ export const auth=asyncHandler( async(req,res,next)=>{
         next()
    
 })
+
+export default auth ;
