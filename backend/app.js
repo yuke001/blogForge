@@ -17,9 +17,13 @@ app.use("/api/blog", blogRoutes);
 
 //global error handler
 app.use((err, req, res, next) => {
-  let statusCode = err.status || 500;
+  let statusCode = err.statusCode || 500;
   let message = err.message || "Something went wrong!!Please try again Later";
-  return res.status(statusCode).json(message);
+  return res.status(statusCode).json({
+    status: "Failure",
+    message,
+    stack: process.env.NODE_ENV === "production" ? undefined : err.stack,
+  });
 });
 
 export default app;

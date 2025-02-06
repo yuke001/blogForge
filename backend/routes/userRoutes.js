@@ -16,8 +16,8 @@ router.post("/login",login);
 router.patch("/profile/:id",auth,upload.single("photo"),updateProfile);
 
 
-router.post("/forgot-password",auth,forgortPassword)
-router.post("/reset-password/:token",auth,resetPassword)
+router.post("/forgot-password",forgortPassword)
+router.post("/reset-password/:token",resetPassword)
 
 
 export default router;
