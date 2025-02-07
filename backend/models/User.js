@@ -14,11 +14,14 @@ const userSchema=new Schema({
     role:{
         type:String,
         enum:['user','admin','author'],
-        default:'user'
+        default:'user',
+        select:false
     },
     photo:{
         type:String,
-      default:"https://static.vecteezy.com/system/resources/previews/030/504/836/non_2x/avatar-account-flat-isolated-on-transparent-background-for-graphic-and-web-design-default-social-media-profile-photo-symbol-profile-and-people-silhouette-user-icon-vector.jpg"
+      default:"https://static.vecteezy.com/system/resources/previews/030/504/836/non_2x/avatar-account-flat-isolated-on-transparent-background-for-graphic-and-web-design-default-social-media-profile-photo-symbol-profile-and-people-silhouette-user-icon-vector.jpg",
+      required:true,
+      select:false
 
     },
     password:{
