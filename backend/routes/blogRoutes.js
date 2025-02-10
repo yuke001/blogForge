@@ -10,7 +10,7 @@ import {
   updateBlog,
 } from "../controllers/blogControllers.js";
 import { auth, checkRole } from "../middlewares/auth.js";
-import { createComment, getComments } from "../controllers/commentControllers.js";
+import { createComment, deleteComment, getComments } from "../controllers/commentControllers.js"
 
 let upload = multer({ storage: storage });
 
@@ -41,8 +41,8 @@ router.delete("/:slug", auth, checkRole("author", "admin"), deleteBlog);
 router.post("/:slug/like", auth, ToggleLikeBlog);
 
 
-router.post("/:slug/comments",auth,createCommentment)
-router.get("/:slug/comments",auth,getCommentss)
-// router.delete("/:slug/comments/:commentId",auth,deleteComment)
+router.post("/:slug/comments",auth,createComment)
+router.get("/:slug/comments",auth,getComments)
+router.delete("/:slug/comments/:commentId",auth,deleteComment)
 
 export default router;

@@ -37,3 +37,21 @@ let comments=await Comment.find({blog:blog._id}).sort("-createdAt").populate("us
    
     res.status(200).json(comments);
 });
+
+
+export const deleteComment=asyncHandler(async(req,res)=>{
+    let {slug,commentId}=req.params;
+    let blog=await Blog.findOne({slug});
+    if(!blog){
+        return res.sendStatus(404)
+    }
+    let comment=await Comment.findById({commentId});
+    if(!comment){
+        return res.sendStatus(404)
+    }
+    if(comment.user!==req.userId){
+        return res.status(401).json({message:"Unauthorised"})
+    }
+    await Comment.findByIdAndDelete(commentId);
+    res.sendStatus(204);
+})
