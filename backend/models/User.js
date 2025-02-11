@@ -4,12 +4,13 @@ import bcrypt from 'bcryptjs';
 const userSchema=new Schema({
     username:{
         type:String,
-        required:true,
+        required:[true,"Username is required"],
         minLength:[4,"Please enter characters above 4"]
     },
     email:{
         type:String,
-        required:true
+        required:[true,"Email is required"],
+        unique:true,
     },
     role:{
         type:String,
@@ -26,7 +27,7 @@ const userSchema=new Schema({
     },
     password:{
         type:String,
-        required:true
+        required:[true,"Password is required"],
     },
     confirmPassword:{
         type:String,

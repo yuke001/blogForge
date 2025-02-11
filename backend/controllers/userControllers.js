@@ -4,16 +4,17 @@ import asyncHandler from "express-async-handler";
 import crypto from "crypto";
 import { send } from "../utils/send.js";
 
-
- // register
+// register
 export const register = asyncHandler(async (req, res, next) => {
   let { username, email, password, confirmPassword } = req.body;
   console.log(req.file);
+
   //verify user is in db already
-  let existingUser = await User.findOne({ email });
-  if (existingUser) {
-    throw new Error("User already exists,Please Login");
-  }
+  // let existingUser = await User.findOne({ email });
+  // if (existingUser) {
+  //   throw new Error("User already exists,Please Login");
+  // }
+
   //creating a new user
   let newUser = await User.create({
     username,
@@ -29,8 +30,7 @@ export const register = asyncHandler(async (req, res, next) => {
   res.status(201).json({ newUser, token });
 });
 
-
- // login
+// login
 export const login = asyncHandler(async (req, res, next) => {
   let { email, password } = req.body;
 
@@ -50,12 +50,17 @@ export const login = asyncHandler(async (req, res, next) => {
   //token
   let token = await generateToken(existingUser._id);
   //sending response
-  res.status(200).json({username:existingUser.username,photo:existingUser.photo,email:existingUser.email,token});
-
+  res
+    .status(200)
+    .json({
+      username: existingUser.username,
+      photo: existingUser.photo,
+      email: existingUser.email,
+      token,
+    });
 });
 
-
- // update profile
+// update profile
 export const updateProfile = asyncHandler(async (req, res, next) => {
   let { id } = req.params;
 
@@ -187,13 +192,13 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
   res.status(200).send("Password reset successful");
 });
 
-export const logout=asyncHandler(async(req,res)=>{
-  let userId=req.userId;
-  let user=await User.findById(userId);
-  if(!user){
-      res.status(401);
-      throw new Error("User is not logged in!")
-  }
-  req.userId=null;
-  res.sendStatus(200)
-})
+export const logout = asyncHandler(async (req, res) => {
+  // let userId=req.userId;
+  // let user=await User.findById(userId);
+  // if(!user){
+  //     res.status(401);
+  //     throw new Error("User is not logged in!")
+  // }
+  req.userId = null;
+  res.sendStatus(200);
+});

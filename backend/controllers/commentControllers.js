@@ -1,6 +1,8 @@
 import asyncHandler from "express-async-handler"
 import Blog from "../models/Blog.js";
 import Comment from "../models/Comment.js";
+
+//create comment
 export const createComment=asyncHandler(async(req,res)=>{
     const {slug}=req.params;
     const {content}=req.body;
@@ -24,6 +26,8 @@ export const createComment=asyncHandler(async(req,res)=>{
    await comment.populate("user","username photo role -_id")
     res.status(201).json(comment)
 })
+
+// get comments
 export const getComments=asyncHandler(async(req,res)=>{
     const {slug}=req.params;
     const blog=await Blog.findOne({slug});
