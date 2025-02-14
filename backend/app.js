@@ -20,12 +20,7 @@ let limiter=rateLimit({
 })
 
 //middlewares
-app.use(
-  cors({
-    origin: "http://localhost:5173", // Allow only this origin
-    credentials: true, // Allow credentials (cookies, authorization headers)
-  })
-);
+app.use(cors());
 app.use(limiter);
 app.use(helmet())
 
