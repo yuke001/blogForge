@@ -1,42 +1,65 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { AppBar, Toolbar, Typography, Button, Box, Stack } from "@mui/material";
 
 const Nav = () => {
   const { user, logout } = useContext(AuthContext);
 
   return (
-    <nav className="bg-gray-900 text-white p-4 shadow-md">
-      <div className="container mx-auto flex justify-between items-center">
+    <AppBar position="static" sx={{ bgcolor: "primary.dark", p: 1 }}>
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         {/* Logo */}
-        <Link to="/" className="text-2xl font-bold">
+        <Typography
+          variant="h6"
+          component={Link}
+          to="/"
+          sx={{ textDecoration: "none", color: "inherit", fontWeight: "bold" }}
+        >
           MyBlog
-        </Link>
+        </Typography>
 
         {/* Navigation Links */}
-        <div className="space-x-4">
-          <Link to="/" className="hover:text-gray-400">Home</Link>
-          {user && <Link to="/create" className="hover:text-gray-400">Create Blog</Link>}
-        </div>
+        <Stack direction="row" spacing={2}>
+          <Button component={Link} to="/" sx={{ color: "white" }}>
+            Home
+          </Button>
+          {user && (
+            <Button component={Link} to="/create" sx={{ color: "white" }}>
+              Create Blog
+            </Button>
+          )}
+        </Stack>
 
         {/* User Section */}
-        <div className="space-x-4">
+        <Box>
           {user ? (
-            <>
-              <Link to="/profile" className="hover:text-gray-400">{user.username}</Link>
-              <button onClick={logout} className="bg-red-500 px-3 py-1 rounded-md hover:bg-red-600">
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Button component={Link} to="/profile" sx={{ color: "white" }}>
+                {user.username}
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={logout}
+                sx={{ textTransform: "none" }}
+              >
                 Logout
-              </button>
-            </>
+              </Button>
+            </Stack>
           ) : (
-            <>
-              <Link to="/login" className="hover:text-gray-400">Login</Link>
-              <Link to="/register" className="hover:text-gray-400">Register</Link>
-            </>
+            <Stack direction="row" spacing={2}>
+              <Button component={Link} to="/login" sx={{ color: "white" }}>
+                Login
+              </Button>
+              <Button component={Link} to="/register" sx={{ color: "white" }}>
+                Register
+              </Button>
+            </Stack>
           )}
-        </div>
-      </div>
-    </nav>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 };
 

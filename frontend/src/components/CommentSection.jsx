@@ -8,7 +8,7 @@ const CommentSection = ({ blogId }) => { // Received blogId as prop
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
     const [loading, setLoading] = useState(false);
-    const API_URL = import.meta.env.VITE_API_URL + "/blogs";
+    const API_URL = import.meta.env.VITE_API_URL + "/blog";
 
     useEffect(() => {
         fetchComments();

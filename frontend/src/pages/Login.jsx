@@ -1,11 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../services/authService"; // ✅ Fixed import
+import { loginUser } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
-import Loader from "../components/Loader";
+import { toast } from "react-toastify";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  CircularProgress,
+} from "@mui/material";
 
 const Login = () => {
-  const { setUser } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -25,56 +33,81 @@ const Login = () => {
     setError("");
 
     try {
-      const userData = await loginUser(formData); // ✅ Fixed function call
-      setUser(userData);
+      const response = await loginUser(formData);
+      const userData = {
+        username: response.username,
+        email: response.email,
+        token: response.token,
+      };
+
+      login(userData);
+      toast.success("Login successful!");
       navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials.");
+      toast.error(err.response?.data?.message || "Invalid credentials.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
-        {error && <p className="text-red-500 text-center">{error}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+      bgcolor="grey.100"
+    >
+      <Paper elevation={3} sx={{ p: 4, width: 360 }}>
+        <Typography variant="h5" fontWeight="bold" textAlign="center" mb={2}>
+          Login
+        </Typography>
+        {error && (
+          <Typography color="error" textAlign="center" mb={2}>
+            {error}
+          </Typography>
+        )}
+        <form onSubmit={handleSubmit}>
+          <TextField
+            fullWidth
+            label="Email"
             name="email"
-            placeholder="Email"
+            type="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            margin="normal"
             required
           />
-          <input
-            type="password"
+          <TextField
+            fullWidth
+            label="Password"
             name="password"
-            placeholder="Password"
+            type="password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full p-2 border rounded"
+            margin="normal"
             required
           />
-          <button
+          <Button
             type="submit"
-            className="w-full bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
+            fullWidth
+            variant="contained"
+            color="primary"
+            sx={{ mt: 2 }}
             disabled={loading}
           >
-            {loading ? <Loader /> : "Login"}
-          </button>
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+          </Button>
         </form>
-        <p className="text-center mt-3">
+        <Typography textAlign="center" mt={2}>
           Don't have an account?{" "}
-          <a href="/register" className="text-blue-500">
+          <Button component="a" href="/register" color="primary">
             Register
-          </a>
-        </p>
-      </div>
-    </div>
+          </Button>
+        </Typography>
+      </Paper>
+    </Box>
   );
 };
 

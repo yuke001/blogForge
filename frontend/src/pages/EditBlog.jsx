@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getBlog, updateBlog } from "../services/blogService";
 import { useAuth } from "../context/AuthContext";
 import Loader from "../components/Loader";
+import { toast } from "react-toastify";
 
 const EditBlog = () => {
     const { user } = useAuth();
@@ -28,12 +29,21 @@ const EditBlog = () => {
                     categories: response.categories,
                     featuredImage: null,
                 });
+
+                // Validate if the slug matches the fetched blog title (basic check)
+                const expectedSlug = response.title.toLowerCase().replace(/\s+/g, "-");  // basic slug generation
+                if (slug !== expectedSlug) {
+                    toast.error("Invalid blog URL."); // Display error if slug doesn't match
+                    navigate("/"); // Redirect to home page or another appropriate page
+                }
             } catch (err) {
                 setError(err.response?.data?.message || "Failed to fetch blog.");
+                toast.error(err.response?.data?.message || "Failed to fetch blog.");  //Display the error to the user
+                navigate("/");  //Redirect the user if fetch fails
             }
         };
         fetchBlog();
-    }, [slug]);
+    }, [slug, navigate]);
 
     if (!user || (user.role !== "admin" && user.role !== "author")) {
         return <p className="text-center text-red-500">Access Denied!</p>;
@@ -67,6 +77,7 @@ const EditBlog = () => {
             navigate(`/blog/${slug}`);
         } catch (err) {
             setError(err.response?.data?.message || "Something went wrong.");
+            toast.error(err.response?.data?.message || "Something went wrong.");  //Display the error
         } finally {
             setLoading(false);
         }

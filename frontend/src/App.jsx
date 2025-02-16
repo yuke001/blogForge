@@ -1,3 +1,4 @@
+// frontend/src/App.jsx
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -8,6 +9,8 @@ import EditBlog from "./pages/EditBlog";
 import Profile from "./pages/Profile";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import the CSS!
 
 const App = () => {
   return (
@@ -23,6 +26,7 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
       </Routes>
       <Footer />
+      <ToastContainer /> {/* Add ToastContainer here */}
     </div>
   );
 };

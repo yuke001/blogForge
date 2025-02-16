@@ -1,6 +1,7 @@
+// frontend/src/services/blogService.js
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL + "/blogs";
+const API_URL = import.meta.env.VITE_API_URL + "/blog"; // Corrected API_URL
 
 // Fetch all blogs
 export const getBlogs = async () => {
@@ -23,7 +24,6 @@ export const getBlogs = async () => {
     return []; // Ensure it never returns undefined or null
   }
 };
-
 
 // Fetch a single blog by slug
 export const getBlog = async (slug) => {

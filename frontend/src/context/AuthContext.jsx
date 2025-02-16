@@ -1,6 +1,7 @@
 // frontend/src/context/AuthContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
 import { getUserProfile, logoutUser } from "../services/authService";
+import { toast } from 'react-toastify';
 
 export const AuthContext = createContext();
 
@@ -23,6 +24,7 @@ export const AuthProvider = ({ children }) => {
                 console.error("Error fetching user profile:", error);
                 setUser(null);
                 localStorage.removeItem("token"); //Clear token if profile fetch fails.
+                toast.error("Failed to fetch user profile. Please login again."); // Show error message
             } finally {
                 setLoading(false);
             }
@@ -45,6 +47,7 @@ export const AuthProvider = ({ children }) => {
             }
         } catch (error) {
             console.error("Logout failed:", error);
+            toast.error("Logout failed. Please try again."); //Show error message
             // Optionally handle the error (e.g., show a message to the user)
         } finally {
             localStorage.removeItem("token");

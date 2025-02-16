@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getBlogs } from "../services/blogService";
 import BlogCard from "../components/BlogCard";
-import Loader from "../components/Loader";
+import { Container, Typography, Grid, CircularProgress, Box } from "@mui/material";
 
 const Home = () => {
   const [blogs, setBlogs] = useState([]);
@@ -12,7 +12,7 @@ const Home = () => {
       try {
         const data = await getBlogs();
         console.log("Fetched blogs:", data); // Debugging log
-  
+
         if (Array.isArray(data)) {
           setBlogs(data);
         } else {
@@ -26,26 +26,34 @@ const Home = () => {
         setLoading(false);
       }
     };
-  
+
     fetchBlogs();
   }, []);
-  
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold text-center mb-6">Latest Blogs</h1>
+    <Container sx={{ py: 4 }}>
+      <Typography variant="h4" fontWeight="bold" textAlign="center" mb={4}>
+        Latest Blogs
+      </Typography>
+
       {loading ? (
-        <Loader />
+        <Box display="flex" justifyContent="center" mt={4}>
+          <CircularProgress />
+        </Box>
       ) : blogs.length > 0 ? (
-        <div className="grid md:grid-cols-3 gap-6">
+        <Grid container spacing={3}>
           {blogs.map((blog) => (
-            <BlogCard key={blog._id} blog={blog} />
+            <Grid item xs={12} sm={6} md={4} key={blog._id}>
+              <BlogCard blog={blog} />
+            </Grid>
           ))}
-        </div>
+        </Grid>
       ) : (
-        <p className="text-center text-gray-600">No blogs available.</p>
+        <Typography variant="body1" color="text.secondary" textAlign="center">
+          No blogs available.
+        </Typography>
       )}
-    </div>
+    </Container>
   );
 };
 

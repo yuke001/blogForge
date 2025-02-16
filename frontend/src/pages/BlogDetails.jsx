@@ -40,7 +40,7 @@ const BlogDetails = () => {
 
             <p className="text-lg">{blog.content}</p>
 
-            <CommentSection blogId={blog._id} /> {/* Pass blogId instead of slug */}
+            <CommentSection blogId={slug} /> {/* Pass slug instead of blog._id */}
         </div>
     );
 };
